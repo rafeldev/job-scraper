@@ -1,6 +1,5 @@
 import fetch from 'node-fetch';
 import { saveToNotion } from './notion.js';
-import { sendEmailNotification } from './email.js';
 import { loadCache, saveCache, isInCache } from './cache.js';
 import fs from 'fs/promises';
 
@@ -180,12 +179,9 @@ async function main() {
     
     if (filteredJobs.length === 0) {
       console.log('ℹ️  No hay ofertas nuevas para procesar');
-      await sendEmailNotification({
-        totalFound: allJobs.length,
-        newJobs: 0,
-        creditsUsed,
-        duration: Date.now() - startTime
-      });
+      console.log(`📊 Total encontrado: ${allJobs.length} ofertas`);
+      console.log(`💳 Créditos usados: ${creditsUsed}`);
+      console.log(`⏱️  Duración: ${Math.round((Date.now() - startTime) / 1000)}s`);
       return;
     }
     
@@ -203,29 +199,16 @@ async function main() {
       }
     }
     
-    // Enviar notificación por email
+    // Resumen final
     const duration = Date.now() - startTime;
-    await sendEmailNotification({
-      totalFound: allJobs.length,
-      newJobs: savedCount,
-      creditsUsed,
-      duration,
-      jobs: filteredJobs.slice(0, 5) // Primeras 5 ofertas
-    });
-    
     console.log('\n✨ Proceso completado exitosamente!');
     console.log(`⏱️  Duración: ${Math.round(duration / 1000)}s`);
     console.log(`💾 Guardadas: ${savedCount} ofertas`);
+    console.log(`💳 Créditos usados: ${creditsUsed}`);
     
   } catch (error) {
     console.error('\n❌ Error en el proceso:', error);
-    
-    // Enviar email de error
-    await sendEmailNotification({
-      error: error.message,
-      totalFound: allJobs.length,
-      creditsUsed
-    });
+    console.error('Stack trace:', error.stack);
     
     process.exit(1);
   }

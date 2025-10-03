@@ -1,6 +1,6 @@
 # 🚀 Job Scraper Automation
 
-Sistema automatizado de scraping de ofertas de trabajo React/TypeScript en LATAM usando GitHub Actions + Firecrawl + Notion + Email.
+Sistema automatizado de scraping de ofertas de trabajo React/TypeScript en LATAM usando GitHub Actions + Firecrawl + Notion.
 
 ## 📋 Características
 
@@ -8,7 +8,6 @@ Sistema automatizado de scraping de ofertas de trabajo React/TypeScript en LATAM
 - ✅ **Filtrado inteligente** (< 72 horas, excluye empresas no deseadas)
 - ✅ **Sistema de caché** (evita duplicados)
 - ✅ **Guardado automático en Notion**
-- ✅ **Notificaciones por Email** con resumen HTML
 - ✅ **100% gratis** usando GitHub Actions
 - ✅ **Logs detallados** para debugging
 
@@ -17,7 +16,6 @@ Sistema automatizado de scraping de ofertas de trabajo React/TypeScript en LATAM
 - **GitHub Actions** - Automatización y scheduling
 - **Firecrawl API** - Web scraping inteligente
 - **Notion API** - Base de datos de ofertas
-- **Nodemailer** - Notificaciones por email
 - **Node.js 18+** - Runtime
 
 ---
@@ -92,21 +90,7 @@ await createNotionDatabase(PARENT_PAGE_ID);
    - **Free**: 500 créditos (prueba)
    - **Hobby**: $16/mes, 3,000 créditos (recomendado)
 
-### Paso 4: Configurar Email (Gmail)
-
-#### 4.1. Habilitar App Password de Gmail
-
-1. Ve a [https://myaccount.google.com/security](https://myaccount.google.com/security)
-2. Busca **"App passwords"** (o "Contraseñas de aplicaciones")
-3. Si no ves la opción, primero habilita **2-Step Verification**
-4. Genera una nueva App Password:
-   - Nombre: `Job Scraper Bot`
-   - Click **"Create"**
-5. **Copia la contraseña de 16 caracteres** (sin espacios)
-
-⚠️ **Importante**: Usa la App Password, NO tu contraseña normal de Gmail.
-
-### Paso 5: Configurar GitHub Secrets
+### Paso 4: Configurar GitHub Secrets
 
 1. Ve a tu repositorio en GitHub
 2. Click en **Settings** → **Secrets and variables** → **Actions**
@@ -117,9 +101,6 @@ await createNotionDatabase(PARENT_PAGE_ID);
 | `FIRECRAWL_API_KEY` | `fc-xxxxx...` | Tu API key de Firecrawl |
 | `NOTION_API_KEY` | `secret_xxxxx...` | Token de integración de Notion |
 | `NOTION_DATABASE_ID` | `xxxxx...` | ID de tu base de datos de Notion |
-| `EMAIL_USER` | `tu-email@gmail.com` | Tu email de Gmail |
-| `EMAIL_APP_PASSWORD` | `xxxx xxxx xxxx xxxx` | App Password de Gmail (sin espacios) |
-| `EMAIL_TO` | `tu-email@gmail.com` | Email donde recibirás notificaciones |
 
 **Ejemplo de cómo agregar un secret:**
 ```
@@ -138,9 +119,6 @@ Secret: fc-abc123def456...
 export FIRECRAWL_API_KEY="tu-api-key"
 export NOTION_API_KEY="tu-notion-key"
 export NOTION_DATABASE_ID="tu-database-id"
-export EMAIL_USER="tu-email@gmail.com"
-export EMAIL_APP_PASSWORD="tu-app-password"
-export EMAIL_TO="tu-email@gmail.com"
 
 # Ejecutar scraper
 npm run scrape
@@ -231,15 +209,6 @@ Firecrawl muestra el uso en el dashboard:
 - ~1,500-3,000 páginas por mes
 - Plan Hobby es suficiente ✅
 
-### Notificaciones por Email
-
-Recibirás un email después de cada ejecución con:
-- ✅ Número de ofertas nuevas
-- 📊 Estadísticas (créditos usados, duración)
-- 📋 Lista de las 5 mejores ofertas
-- 🔗 Link directo a cada oferta
-- ⚠️ Errores (si los hay)
-
 ---
 
 ## 🐛 Troubleshooting
@@ -270,16 +239,6 @@ Recibirás un email después de cada ejecución con:
 2. Click `•••` → `Add connections`
 3. Selecciona tu integración
 4. Verifica que el `NOTION_DATABASE_ID` sea correcto
-
-### No llegan los emails
-
-**Problema**: App Password incorrecto o 2FA no habilitado.
-
-**Solución**:
-1. Habilita 2-Step Verification en Google
-2. Genera una nueva App Password
-3. Usa la contraseña SIN espacios en el secret
-4. Verifica que `EMAIL_USER` y `EMAIL_TO` sean correctos
 
 ### "Rate limit exceeded"
 
