@@ -1,5 +1,5 @@
 import fetch from 'node-fetch';
-import { saveToNotion } from './notion.js';
+import { saveToNotion, createDailyDatabase } from './notion.js';
 import { loadCache, saveCache, isInCache } from './cache.js';
 import fs from 'fs/promises';
 import dotenv from 'dotenv';
@@ -152,6 +152,11 @@ async function main() {
   const cache = loadCache();
   
   try {
+    // Crear base de datos para hoy
+    console.log('📅 Creando base de datos diaria en Notion...');
+    await createDailyDatabase();
+    console.log('');
+    
     // Buscar en cada sitio configurado
     for (const site of config.sites) {
       if (!site.enabled) {

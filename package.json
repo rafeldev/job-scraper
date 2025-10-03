@@ -5,6 +5,7 @@
   "main": "src/scraper.js",
   "type": "module",
   "scripts": {
+    "get-page-id": "node src/get-page-id.js",
     "setup": "node src/setup-database.js",
     "scrape": "node src/scraper.js",
     "test": "node src/scraper.js --test",
