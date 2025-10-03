@@ -1,0 +1,133 @@
+name: Daily Job Scraper
+
+on:
+  # Ejecutar diariamente a las 6:00 AM hora de Colombia (11:00 UTC)
+  schedule:
+    - cron: '0 11 * * *'
+  
+  # También permitir ejecución manual desde GitHub
+  workflow_dispatch:
+  
+  # Para testing: ejecutar cuando se haga push a main
+  # push:
+  #   branches: [ main ]
+
+env:
+  NODE_VERSION: '18'
+
+jobs:
+  scrape-jobs:
+    name: Scrape Job Offers
+    runs-on: ubuntu-latest
+    
+    steps:
+      # 1. Checkout del código
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      # 2. Setup de Node.js
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      
+      # 3. Instalar dependencias
+      - name: 📦 Install dependencies
+        run: npm ci
+      
+      # 4. Crear directorios necesarios
+      - name: 📁 Create directories
+        run: |
+          mkdir -p cache
+          mkdir -p logs
+      
+      # 5. Restaurar caché de jobs anteriores
+      - name: 📦 Restore jobs cache
+        uses: actions/cache@v4
+        with:
+          path: cache/jobs.json
+          key: jobs-cache-${{ github.run_number }}
+          restore-keys: |
+            jobs-cache-
+      
+      # 6. Ejecutar el scraper
+      - name: 🚀 Run job scraper
+        env:
+          FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
+          NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+          EMAIL_USER: ${{ secrets.EMAIL_USER }}
+          EMAIL_APP_PASSWORD: ${{ secrets.EMAIL_APP_PASSWORD }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+        run: |
+          echo "🚀 Starting job scraper..."
+          echo "⏰ Current time (UTC): $(date -u)"
+          echo "🇨🇴 Colombia time: $(TZ='America/Bogota' date)"
+          npm run scrape
+      
+      # 7. Guardar logs (incluso si falla)
+      - name: 📝 Upload logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: scraper-logs-${{ github.run_number }}
+          path: logs/
+          retention-days: 30
+      
+      # 8. Guardar caché actualizado
+      - name: 💾 Save updated cache
+        uses: actions/cache/save@v4
+        if: always()
+        with:
+          path: cache/jobs.json
+          key: jobs-cache-${{ github.run_number }}
+      
+      # 9. Notificar si hay error (opcional)
+      - name: ⚠️ Notify on failure
+        if: failure()
+        run: |
+          echo "❌ Scraping failed!"
+          echo "Check the logs for more details."
+          # Aquí podrías agregar notificación a Slack/Discord si quieres
+      
+      # 10. Resumen de ejecución
+      - name: 📊 Execution summary
+        if: always()
+        run: |
+          echo "✅ Workflow completed"
+          echo "📅 Date: $(date)"
+          echo "🔢 Run number: ${{ github.run_number }}"
+          
+  # Job opcional: Limpiar caché viejo semanalmente
+  cleanup-cache:
+    name: Weekly Cache Cleanup
+    runs-on: ubuntu-latest
+    # Ejecutar solo los domingos a las 00:00 UTC
+    if: github.event.schedule == '0 0 * * 0'
+    
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      
+      - name: 📦 Install dependencies
+        run: npm ci
+      
+      - name: 🧹 Clean old cache entries
+        run: |
+          node -e "
+            const { cleanOldCache, getCacheStats } = require('./src/cache.js');
+            console.log('📊 Cache stats before cleanup:');
+            console.log(getCacheStats());
+            const removed = cleanOldCache(30);
+            console.log(\`🧹 Removed \${removed} old entries\`);
+            console.log('📊 Cache stats after cleanup:');
+            console.log(getCacheStats());
+          "
