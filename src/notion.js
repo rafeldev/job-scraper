@@ -1,11 +1,14 @@
 import { Client } from '@notionhq/client';
+import dotenv from 'dotenv';
+
+// Cargar variables de entorno (solo en desarrollo local)
+dotenv.config();
 
 const notion = new Client({
   auth: process.env.NOTION_API_KEY
 });
 
 const DATABASE_ID = process.env.NOTION_DATABASE_ID;
-
 /**
  * Guarda una oferta de trabajo en Notion
  */

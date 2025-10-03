@@ -5,8 +5,10 @@
   "main": "src/scraper.js",
   "type": "module",
   "scripts": {
+    "setup": "node src/setup-database.js",
     "scrape": "node src/scraper.js",
-    "test": "node src/scraper.js --test"
+    "test": "node src/scraper.js --test",
+    "test2": "node src/test.js"
   },
   "keywords": [
     "job-scraper",
@@ -19,6 +21,7 @@
   "license": "MIT",
   "dependencies": {
     "@notionhq/client": "^2.2.15",
+    "dotenv": "^17.2.3",
     "node-fetch": "^3.3.2"
   },
   "engines": {

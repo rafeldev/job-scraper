@@ -3,7 +3,7 @@ name: Daily Job Scraper
 on:
   # Ejecutar diariamente a las 6:00 AM hora de Colombia (11:00 UTC)
   schedule:
-    - cron: '0 11 * * *'
+    - cron: '0 13 * * *'
   
   # También permitir ejecución manual desde GitHub
   workflow_dispatch:

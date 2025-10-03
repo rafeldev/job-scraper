@@ -2,10 +2,16 @@ import fetch from 'node-fetch';
 import { saveToNotion } from './notion.js';
 import { loadCache, saveCache, isInCache } from './cache.js';
 import fs from 'fs/promises';
+import dotenv from 'dotenv';
+
+// Cargar variables de entorno (solo en desarrollo local)
+dotenv.config();
 
 // Configuración
 const FIRECRAWL_API_KEY = process.env.FIRECRAWL_API_KEY;
 const FIRECRAWL_API_URL = 'https://api.firecrawl.dev/v1';
+
+console.log(FIRECRAWL_API_KEY, 'api key');
 
 // Cargar configuración de sitios
 const config = JSON.parse(await fs.readFile('./config/sites.json', 'utf-8'));
