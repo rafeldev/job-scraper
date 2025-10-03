@@ -1,0 +1,56 @@
+{
+  "searchQueries": [
+    "react typescript frontend Colombia remote -BairesDev",
+    "javascript developer LATAM remote -BairesDev",
+    "frontend engineer Colombia -BairesDev"
+  ],
+  "sites": [
+    {
+      "name": "LinkedIn",
+      "enabled": true,
+      "useFirecrawl": true,
+      "searchUrl": "site:linkedin.com/jobs react typescript Colombia",
+      "priority": "high"
+    },
+    {
+      "name": "Computrabajo",
+      "enabled": true,
+      "useFirecrawl": true,
+      "searchUrl": "site:computrabajo.com react typescript Colombia -BairesDev",
+      "priority": "high"
+    },
+    {
+      "name": "Get on Board",
+      "enabled": true,
+      "useFirecrawl": true,
+      "searchUrl": "site:getonbrd.com react typescript",
+      "priority": "medium"
+    },
+    {
+      "name": "Torre",
+      "enabled": true,
+      "useFirecrawl": true,
+      "searchUrl": "site:torre.co react developer Colombia",
+      "priority": "medium"
+    },
+    {
+      "name": "elempleo.com",
+      "enabled": true,
+      "useFirecrawl": true,
+      "searchUrl": "site:elempleo.com react typescript",
+      "priority": "medium"
+    }
+  ],
+  "filters": {
+    "maxAgeHours": 72,
+    "excludeCompanies": ["BairesDev", "bairesdev"],
+    "keywords": ["react", "typescript", "javascript", "frontend"],
+    "locations": ["Colombia", "LATAM", "Remote", "Remoto"],
+    "modalities": ["remote", "hybrid", "remoto", "híbrido"]
+  },
+  "limits": {
+    "maxResultsPerSite": 10,
+    "maxTotalResults": 50,
+    "requestTimeout": 30000
+  }
+}

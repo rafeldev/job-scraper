@@ -1,0 +1,28 @@
+{
+  "name": "job-scraper-automation",
+  "version": "1.0.0",
+  "description": "Automated job scraper for React/TypeScript positions in LATAM",
+  "main": "src/scraper.js",
+  "type": "module",
+  "scripts": {
+    "scrape": "node src/scraper.js",
+    "test": "node src/scraper.js --test"
+  },
+  "keywords": [
+    "job-scraper",
+    "automation",
+    "firecrawl",
+    "notion",
+    "github-actions"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "@notionhq/client": "^2.2.15",
+    "node-fetch": "^3.3.2",
+    "nodemailer": "^6.9.8"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
