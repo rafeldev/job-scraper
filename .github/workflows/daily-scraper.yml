@@ -19,6 +19,7 @@ jobs:
   scrape-jobs:
     name: Scrape Job Offers
     runs-on: ubuntu-latest
+    environment: job-scraper  # 🔑 Especifica el environment donde están los secrets
     
     steps:
       # 1. Checkout del código
@@ -83,18 +84,18 @@ jobs:
             echo "✅ NOTION_PARENT_PAGE_ID está definida (longitud: ${#NOTION_PARENT_PAGE_ID})"
           fi
       
-      # 7. Ejecutar el scraper
-      - name: 🚀 Run job scraper
-        env:
-          FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
-          NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
-          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
-          NOTION_PARENT_PAGE_ID: ${{ secrets.NOTION_PARENT_PAGE_ID }}
-        run: |
-          echo "🚀 Starting job scraper..."
-          echo "⏰ Current time (UTC): $(date -u)"
-          echo "🇨🇴 Colombia time: $(TZ='America/Bogota' date)"
-          npm run scrape
+      # # 7. Ejecutar el scraper
+      # - name: 🚀 Run job scraper
+      #   env:
+      #     FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
+      #     NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+      #     NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+      #     NOTION_PARENT_PAGE_ID: ${{ secrets.NOTION_PARENT_PAGE_ID }}
+      #   run: |
+      #     echo "🚀 Starting job scraper..."
+      #     echo "⏰ Current time (UTC): $(date -u)"
+      #     echo "🇨🇴 Colombia time: $(TZ='America/Bogota' date)"
+      #     npm run scrape
       
       # 8. Guardar logs (incluso si falla)
       - name: 📝 Upload logs
