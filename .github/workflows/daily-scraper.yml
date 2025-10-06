@@ -53,7 +53,37 @@ jobs:
           restore-keys: |
             jobs-cache-
       
-      # 6. Ejecutar el scraper
+      # 6. Verificar variables de entorno
+      - name: 🔍 Verify environment variables
+        env:
+          FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
+          NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+          NOTION_PARENT_PAGE_ID: ${{ secrets.NOTION_PARENT_PAGE_ID }}
+        run: |
+          echo "🔍 Verificando variables de entorno..."
+          if [ -z "$FIRECRAWL_API_KEY" ]; then
+            echo "❌ FIRECRAWL_API_KEY no está definida"
+          else
+            echo "✅ FIRECRAWL_API_KEY está definida (longitud: ${#FIRECRAWL_API_KEY})"
+          fi
+          if [ -z "$NOTION_API_KEY" ]; then
+            echo "❌ NOTION_API_KEY no está definida"
+          else
+            echo "✅ NOTION_API_KEY está definida (longitud: ${#NOTION_API_KEY})"
+          fi
+          if [ -z "$NOTION_DATABASE_ID" ]; then
+            echo "❌ NOTION_DATABASE_ID no está definida"
+          else
+            echo "✅ NOTION_DATABASE_ID está definida (longitud: ${#NOTION_DATABASE_ID})"
+          fi
+          if [ -z "$NOTION_PARENT_PAGE_ID" ]; then
+            echo "❌ NOTION_PARENT_PAGE_ID no está definida"
+          else
+            echo "✅ NOTION_PARENT_PAGE_ID está definida (longitud: ${#NOTION_PARENT_PAGE_ID})"
+          fi
+      
+      # 7. Ejecutar el scraper
       - name: 🚀 Run job scraper
         env:
           FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
@@ -66,7 +96,7 @@ jobs:
           echo "🇨🇴 Colombia time: $(TZ='America/Bogota' date)"
           npm run scrape
       
-      # 7. Guardar logs (incluso si falla)
+      # 8. Guardar logs (incluso si falla)
       - name: 📝 Upload logs
         if: always()
         uses: actions/upload-artifact@v4
@@ -75,7 +105,7 @@ jobs:
           path: logs/
           retention-days: 30
       
-      # 8. Guardar caché actualizado
+      # 9. Guardar caché actualizado
       - name: 💾 Save updated cache
         uses: actions/cache/save@v4
         if: always()
@@ -83,7 +113,7 @@ jobs:
           path: cache/jobs.json
           key: jobs-cache-${{ github.run_number }}
       
-      # 9. Notificar si hay error (opcional)
+      # 10. Notificar si hay error (opcional)
       - name: ⚠️ Notify on failure
         if: failure()
         run: |
@@ -91,7 +121,7 @@ jobs:
           echo "Check the logs for more details."
           # Aquí podrías agregar notificación a Slack/Discord si quieres
       
-      # 10. Resumen de ejecución
+      # 11. Resumen de ejecución
       - name: 📊 Execution summary
         if: always()
         run: |
