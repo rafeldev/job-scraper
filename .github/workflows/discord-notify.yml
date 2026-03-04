@@ -2,8 +2,8 @@ name: Discord Morning Notification
 
 on:
   schedule:
-    # 8:00 AM Colombia (UTC-5)
-    - cron: "0 13 * * *"
+    # 1 hora despues del Daily Job Scraper (08,12,18 UTC -> 09,13,19 UTC)
+    - cron: "10 8,12,18 * * *"
   workflow_dispatch:
 
 env:
