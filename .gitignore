@@ -37,3 +37,11 @@ build/
 tmp/
 temp/
 *.tmp
+
+# Docker
+docker-compose.yml
+Dockerfile
+.env.example
+
+# Exports
+exports/

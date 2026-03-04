@@ -13,25 +13,18 @@
       "priority": "high"
     },
     {
+      "name": "Indeed",
+      "enabled": true,
+      "useFirecrawl": true,
+      "searchUrl": "site:indeed.com frontend react  Colombia",
+      "priority": "high"
+    },
+    {
       "name": "Computrabajo",
       "enabled": true,
       "useFirecrawl": true,
       "searchUrl": "site:computrabajo.com react typescript Colombia -BairesDev",
       "priority": "high"
-    },
-    {
-      "name": "Get on Board",
-      "enabled": true,
-      "useFirecrawl": true,
-      "searchUrl": "site:getonbrd.com react typescript",
-      "priority": "medium"
-    },
-    {
-      "name": "Torre",
-      "enabled": true,
-      "useFirecrawl": true,
-      "searchUrl": "site:torre.co react developer Colombia",
-      "priority": "medium"
     },
     {
       "name": "elempleo.com",

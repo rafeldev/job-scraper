@@ -1,0 +1,230 @@
+sites:
+  - name: Computrabajo
+    enabled: true
+    priority: high
+    domain: computrabajo.com.co
+    startUrls:
+      - https://www.computrabajo.com.co/trabajo-de-react
+    maxPages: 3
+    selectors:
+      card:
+        - article.js-o-link
+        - article.box_offer
+      title:
+        - h2 a
+        - h2
+      company:
+        - p.fc_base.mt5
+        - p[class*='company']
+      location:
+        - p.fs16.fc_aux
+        - p[class*='location']
+      salary:
+        - span.salary
+        - p[class*='salary']
+      link:
+        - h2 a
+        - a.js-o-link
+      date:
+        - p.fc_aux.mt15
+        - span[class*='date']
+      nextPage:
+        - a.b_next
+  - name: ElEmpleo
+    enabled: true
+    priority: high
+    domain: elempleo.com
+    startUrls:
+      - https://www.elempleo.com/co/ofertas-empleo/?palabrasclave=react+frontend
+    maxPages: 3
+    selectors:
+      card:
+        - article.result-item
+        - div.result-item
+      title:
+        - h2 a
+        - h3 a
+      company:
+        - .result-company
+        - .company-name
+      location:
+        - .result-location
+        - .location
+      salary:
+        - .result-salary
+        - .salary
+      link:
+        - h2 a
+        - a[href*='/co/ofertas-trabajo/']
+      date:
+        - .result-date
+        - .date
+      nextPage:
+        - a[aria-label='Siguiente']
+        - a.next
+  - name: Indeed Colombia
+    enabled: true
+    priority: high
+    domain: co.indeed.com
+    startUrls:
+      - https://co.indeed.com/jobs?q=react+frontend&l=Colombia
+    maxPages: 3
+    selectors:
+      card:
+        - "#mosaic-provider-jobcards .job_seen_beacon"
+        - "#mosaic-provider-jobcards [data-testid='slider_item']"
+        - div.job_seen_beacon
+        - div[data-testid='slider_item']
+      title:
+        - h2 a span
+        - h2.jobTitle span
+      company:
+        - span[data-testid='company-name']
+        - .companyName
+      location:
+        - div[data-testid='text-location']
+        - .companyLocation
+      salary:
+        - .salary-snippet
+        - div[data-testid='attribute_snippet_testid']
+      link:
+        - h2 a
+        - a.jcs-JobTitle
+      date:
+        - span.date
+        - span[data-testid='myJobsStateDate']
+      nextPage:
+        - a[data-testid='pagination-page-next']
+        - a[aria-label='Siguiente']
+        - a[aria-label='Next']
+  - name: Magneto365
+    enabled: true
+    priority: medium
+    domain: magneto365.com
+    startUrls:
+      - https://www.magneto365.com/es/empleos?search=react
+    maxPages: 2
+    selectors:
+      card:
+        - div.mg_job_card_desktop_magneto-ui-card-jobs_container_zc0d0
+        - article.mg_job_card_desktop_magneto-ui-card-jobs_zc0d0
+        - div[class*='mg_job_card_desktop_magneto-ui-card-jobs_container']
+        - article[class*='mg_job_card_desktop_magneto-ui-card-jobs']
+        - div.job-card
+        - article.job
+      title:
+        - a.mg_job_card_desktop_magneto-ui-card-jobs_a_zc0d0
+        - a[class*='mg_job_card_desktop_magneto-ui-card-jobs_a']
+        - h2
+        - h3
+      company:
+        - h3.mg_job_card_desktop_magneto-ui-card-jobs_text_zc0d0
+        - h3[class*='mg_job_card_desktop_magneto-ui-card-jobs_text']
+        - .company
+      location:
+        - p.mg_job_card_desktop_magneto-ui-card-jobs_text_zc0d0:nth-of-type(2)
+        - p[class*='mg_job_card_desktop_magneto-ui-card-jobs_text']:nth-of-type(2)
+        - .location
+      salary:
+        - p.mg_job_card_desktop_magneto-ui-card-jobs_text_zc0d0:nth-of-type(1)
+        - p[class*='mg_job_card_desktop_magneto-ui-card-jobs_text']:nth-of-type(1)
+        - .salary
+      link:
+        - a.mg_job_card_desktop_magneto-ui-card-jobs_a_zc0d0
+        - a[class*='mg_job_card_desktop_magneto-ui-card-jobs_a']
+        - a[href*='/empleos/']
+      date:
+        - span.mg_job_card_desktop_magneto-ui-card-jobs_published_zc0d0
+        - span[class*='mg_job_card_desktop_magneto-ui-card-jobs_published']
+        - .date
+      nextPage:
+        - a.next
+
+  - name: Working Nomads
+    # Remoto internacional, gratuito para postular
+    enabled: true
+    priority: high
+    domain: workingnomads.com
+    startUrls:
+      - https://www.workingnomads.com/remote-front-end-jobs
+    maxPages: 2
+    selectors:
+      card:
+        - .job
+        - article.job
+        - li.job
+        - "[class*='job-card']"
+        - article
+        - li
+      title:
+        - "a[href*='/jobs/']"
+        - h2 a
+        - h3 a
+      company:
+        - .company
+        - .company-name
+        - "[class*='company']"
+      location:
+        - .location
+        - .region
+        - "[class*='location']"
+      salary:
+        - .salary
+        - "[class*='salary']"
+      link:
+        - "a[href*='/jobs/']"
+      date:
+        - .date
+        - time
+        - "[class*='date']"
+      nextPage:
+        - a.next
+        - "a[rel='next']"
+  - name: Remote OK
+    enabled: true
+    priority: high
+    domain: remoteok.com
+    # Remote OK usa API JSON; los selectors no se usan pero el schema exige al menos uno en card/title/link
+    startUrls:
+      - https://remoteok.com/api
+    maxPages: 1
+    selectors:
+      card: ["body"]
+      title: ["h1"]
+      company: []
+      location: []
+      salary: []
+      link: ["a"]
+      date: []
+
+filters:
+  maxAgeHours: 168
+  excludeCompanies: []
+  keywords:
+    - react
+    - nextjs
+    - next
+    - frontend
+    - typescript
+    - redux
+  locations: []
+  modalities:
+    - remoto
+    - remote
+    - hibrido
+    - híbrido
+    - presencial
+
+limits:
+  maxResultsPerSite: 40
+  timeoutMs: 30000
+  minDelayMs: 2000
+  maxDelayMs: 5000
+  maxRetries: 3
+
+exports:
+  outputDir: exports
+  formats:
+    - json
+    - csv
+    - xlsx

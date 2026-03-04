@@ -1,29 +1,54 @@
 {
   "name": "job-scraper-automation",
   "version": "1.0.0",
-  "description": "Automated job scraper for React/TypeScript positions in LATAM",
-  "main": "src/scraper.js",
+  "description": "Automated job scraper for Frontend React jobs in Colombia",
+  "main": "dist/main.js",
   "type": "module",
   "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsx src/main.ts",
+    "migrate": "tsx src/db/migrate.ts",
+    "scrape": "tsx src/main.ts",
+    "playwright:install": "npx playwright install",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "tsc --noEmit",
     "get-page-id": "node src/get-page-id.js",
     "setup": "node src/setup-database.js",
-    "scrape": "node src/scraper.js",
-    "test": "node src/scraper.js --test",
-    "test2": "node src/test.js"
+    "sync:notion": "tsx src/scripts/syncNotion.ts"
   },
   "keywords": [
     "job-scraper",
     "automation",
-    "firecrawl",
+    "playwright",
+    "typescript",
     "notion",
-    "github-actions"
+    "postgresql"
   ],
   "author": "Your Name",
   "license": "MIT",
   "dependencies": {
     "@notionhq/client": "^2.2.15",
     "dotenv": "^17.2.3",
-    "node-fetch": "^3.3.2"
+    "fast-levenshtein": "^3.0.0",
+    "node-fetch": "^3.3.2",
+    "pg": "^8.16.3",
+    "playwright": "^1.56.1",
+    "playwright-extra": "^4.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
+    "xlsx": "^0.18.5",
+    "yaml": "^2.8.1",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "@types/fast-levenshtein": "^0.0.4",
+    "@types/jsdom": "^27.0.0",
+    "@types/node": "^24.7.2",
+    "@types/pg": "^8.15.6",
+    "jsdom": "^27.0.1",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
   },
   "engines": {
     "node": ">=18.0.0"
