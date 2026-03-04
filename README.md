@@ -86,11 +86,27 @@ La fuente de verdad es **Supabase**. Notion se rellena leyendo de la DB:
 
 Requisitos: `NOTION_SYNC_ENABLED=true`, `NOTION_API_KEY`, `NOTION_PARENT_PAGE_ID` (página bajo la que se crean las bases).
 
+## Notificaciones a Discord (resumen diario)
+
+Puedes enviar un resumen diario con el total de ofertas nuevas de las últimas 24 horas.
+
+Variables:
+
+- `DISCORD_WEBHOOK_URL`: webhook del canal de Discord
+- `DISCORD_ALERT_THRESHOLD`: umbral para alerta extra (default `20`)
+- `NOTIFY_WINDOW_HOURS`: ventana de tiempo para el conteo (default `24`)
+- `NOTIFY_TIMEZONE`: zona horaria para el sello de hora del mensaje (default `America/Bogota`)
+
+Script:
+
+- `npm run notify:discord`: envía resumen diario y alerta adicional si supera el umbral
+
 ## Scripts
 
 - `npm run migrate`: aplica migraciones SQL
 - `npm run scrape`: ejecuta pipeline principal (incluye sync Notion últimos 3 días)
 - `npm run sync:notion`: solo sincroniza Supabase → Notion (últimos `NOTION_SYNC_SINCE_DAYS` días)
+- `npm run notify:discord`: envía notificación diaria a Discord
 - `npm run lint`: validación TypeScript
 - `npm run test`: pruebas unitarias e integración con fixtures
 - `npm run dev`: ejecutar en modo desarrollo con `tsx`
@@ -109,6 +125,19 @@ Secretos recomendados en GitHub:
 - `DATABASE_URL`
 - `NOTION_SYNC_ENABLED` (opcional)
 - `NOTION_API_KEY`, `NOTION_PARENT_PAGE_ID` (opcionales)
+
+Workflow adicional: `.github/workflows/discord-notify.yml`
+
+- Ejecuta en UTC: `13:00` (8:00 AM Colombia)
+- Consulta el total de ofertas nuevas en las últimas 24 horas
+- Envía resumen a Discord y alerta extra al superar el umbral
+
+Secretos recomendados en GitHub para este workflow:
+
+- `DATABASE_URL`
+- `DISCORD_WEBHOOK_URL`
+- `DISCORD_ALERT_THRESHOLD` (opcional)
+- `NOTIFY_WINDOW_HOURS` (opcional)
 
 ## Modelo de datos
 

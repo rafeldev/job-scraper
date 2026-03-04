@@ -53,6 +53,21 @@ export async function getJobsByFirstSeenDate(date: string): Promise<JobForNotion
   })) as JobForNotion[];
 }
 
+/** Cuenta jobs activos vistos por primera vez en las últimas N horas. */
+export async function countActiveJobsFirstSeenInLastHours(hours: number): Promise<number> {
+  if (!Number.isFinite(hours) || hours <= 0) {
+    throw new Error("hours must be a positive number.");
+  }
+  const result = await db.query(
+    `SELECT COUNT(*)::int AS total
+     FROM jobs
+     WHERE active = true
+       AND first_seen_at >= NOW() - ($1::int * INTERVAL '1 hour')`,
+    [Math.floor(hours)]
+  );
+  return (result.rows[0]?.total as number | undefined) ?? 0;
+}
+
 export async function persistJobs(jobs: NormalizedJob[], runId: string): Promise<PersistResult> {
   let inserted = 0;
   let updated = 0;

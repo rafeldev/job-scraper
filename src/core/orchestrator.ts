@@ -100,7 +100,7 @@ export async function runOrchestrator(config: AppConfig): Promise<RunStats> {
       formats: config.exports.formats,
       dateTag: new Date().toISOString().slice(0, 10)
     });
-    await syncNotionFromDb({ sinceDays: 3 });
+    await syncNotionFromDb({ sinceDays: 1 });
     await finishRun(runId, "success");
     runStats.finishedAt = new Date();
     return runStats;

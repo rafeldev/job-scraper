@@ -8,6 +8,7 @@ dotenv.config({ quiet: true });
 const notionToken = process.env.NOTION_API_KEY;
 const parentPageId = process.env.NOTION_PARENT_PAGE_ID;
 const notionEnabled = process.env.NOTION_SYNC_ENABLED === "true";
+const notionTimezone = process.env.NOTION_TIMEZONE?.trim() || "UTC";
 
 const NOTION_DB_TITLE_PREFIX = "Ofertas de Trabajo - ";
 const RATE_LIMIT_MS = 350;
@@ -112,28 +113,41 @@ function sleep(ms: number): Promise<void> {
   return new Promise((r) => setTimeout(r, ms));
 }
 
+function formatDateInTimezone(date: Date, timeZone: string): string {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit"
+  }).formatToParts(date);
+  const year = parts.find((p) => p.type === "year")?.value;
+  const month = parts.find((p) => p.type === "month")?.value;
+  const day = parts.find((p) => p.type === "day")?.value;
+  if (!year || !month || !day) return date.toISOString().slice(0, 10);
+  return `${year}-${month}-${day}`;
+}
+
 /**
  * Sincroniza la base de Supabase con Notion: una tabla por día (first_seen_at).
  * Crea o reutiliza una base "Ofertas de Trabajo - YYYY-MM-DD" por cada día y actualiza/crea páginas.
  */
 export async function syncNotionFromDb(options: { sinceDays?: number } = {}): Promise<void> {
   if (!notionEnabled || !notion || !parentPageId) return;
-  const sinceDays = options.sinceDays ?? 3;
+  const sinceDays = options.sinceDays ?? 1;
   const today = new Date();
   const dates: string[] = [];
   for (let i = 0; i < sinceDays; i++) {
     const d = new Date(today);
     d.setUTCDate(d.getUTCDate() - i);
-    dates.push(d.toISOString().slice(0, 10));
+    dates.push(formatDateInTimezone(d, notionTimezone));
   }
 
   for (const date of dates) {
     const jobs = await getJobsByFirstSeenDate(date);
-    // Siempre crear/obtener la base del día para que la página aparezca en Notion (aunque esté vacía)
+    // Evita crear bases vacías cuando no hay ofertas para ese día.
+    if (jobs.length === 0) continue;
     const dbId = await getOrCreateDatabaseForDate(date);
     await sleep(RATE_LIMIT_MS);
-
-    if (jobs.length === 0) continue;
 
     const urlToPageId = await listPageIdsByUrl(dbId);
     await sleep(RATE_LIMIT_MS);

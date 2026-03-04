@@ -8,7 +8,7 @@ import { syncNotionFromDb } from "../integrations/notion.js";
 
 dotenv.config();
 
-const sinceDays = parseInt(process.env.NOTION_SYNC_SINCE_DAYS ?? "7", 10) || 7;
+const sinceDays = parseInt(process.env.NOTION_SYNC_SINCE_DAYS ?? "1", 10) || 1;
 
 async function main() {
   await syncNotionFromDb({ sinceDays });

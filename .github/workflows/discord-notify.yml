@@ -1,0 +1,48 @@
+name: Discord Morning Notification
+
+on:
+  schedule:
+    # 8:00 AM Colombia (UTC-5)
+    - cron: "0 13 * * *"
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: "20"
+
+jobs:
+  notify-discord:
+    name: Send Discord Job Summary
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Send Discord notification
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          DISCORD_ALERT_THRESHOLD: ${{ secrets.DISCORD_ALERT_THRESHOLD }}
+          NOTIFY_WINDOW_HOURS: ${{ secrets.NOTIFY_WINDOW_HOURS }}
+          NOTIFY_TIMEZONE: America/Bogota
+        run: |
+          mkdir -p logs
+          npm run notify:discord
+
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: discord-notify-logs-${{ github.run_number }}
+          path: logs/
+          retention-days: 14

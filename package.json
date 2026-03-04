@@ -15,7 +15,8 @@
     "lint": "tsc --noEmit",
     "get-page-id": "node src/get-page-id.js",
     "setup": "node src/setup-database.js",
-    "sync:notion": "tsx src/scripts/syncNotion.ts"
+    "sync:notion": "tsx src/scripts/syncNotion.ts",
+    "notify:discord": "tsx src/scripts/notifyDiscord.ts"
   },
   "keywords": [
     "job-scraper",
