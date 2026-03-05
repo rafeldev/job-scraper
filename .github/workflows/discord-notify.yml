@@ -12,6 +12,7 @@ env:
 jobs:
   notify-discord:
     name: Send Discord Job Summary
+    environment: job-scraper
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
