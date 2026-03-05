@@ -11,6 +11,7 @@ env:
 jobs:
   scrape-jobs:
     name: Scrape Job Offers
+    environment: job-scraper
     runs-on: ubuntu-latest
     timeout-minutes: 40
 
